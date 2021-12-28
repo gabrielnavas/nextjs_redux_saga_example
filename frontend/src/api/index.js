@@ -1,0 +1,1 @@
+export const getApiEndpoint = () => 'http://localhost:8080'

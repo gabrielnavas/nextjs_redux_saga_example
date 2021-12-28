@@ -1,0 +1,10 @@
+CREATE SCHEMA IF NOT EXISTS todos;
+
+CREATE TABLE IF NOT EXISTS todos.todo (
+  id serial,
+  description VARCHAR(255) NOT NULL,
+  done BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW(),
+  PRIMARY KEY (id)
+);
