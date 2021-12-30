@@ -38,7 +38,7 @@ const reducer = (state = initialState, action) => {
         done: action.payload.done,
       }
       const todos = [...state.todos]
-      todos.push(todoCreated)
+      todos.unshift(todoCreated)
       return { ...state, todos, error: '' };
     
     case TODO_ADD_REJECT:

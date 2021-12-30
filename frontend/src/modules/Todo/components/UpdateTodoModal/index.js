@@ -1,31 +1,29 @@
 import { useEffect, useState } from 'react';
-import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+
+import { useSelector, useDispatch } from 'react-redux';
+
+import {Box, Button, Typography, Modal, Stack, TextField} from '@mui/material';
 
 import {todoUpdateRequest} from '../../../../store/actions/todo'
 
-import styles from './styles.module.css'
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
 };
 
 const UpdateTodoModal = ({isOpen, onClose })  => {
-  
-  const dispatch = useDispatch()
-  
-
   const [description, setDescription] = useState('')
   const [done, setDone] = useState(false)
   
+  const dispatch = useDispatch()
   const todoStore = useSelector(state => state.todos)
 
   useEffect(() => {
@@ -36,7 +34,6 @@ const UpdateTodoModal = ({isOpen, onClose })  => {
   }, [todoStore.todoUpdate])
 
   const handleUpdate = () => {
-    debugger
     const todoToUpdate = {
       ...todoStore.todoUpdate,
       description,
@@ -46,40 +43,37 @@ const UpdateTodoModal = ({isOpen, onClose })  => {
     onClose()
   }
 
-  console.log(done);
-
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={onClose}
-      style={customStyles}
-      contentLabel="Example Modal"
-      ariaHideApp={false}
-    >
-      <div className={styles.content}> 
-        <div>Atualizar Todo item</div>
-        <form className={styles.form}>
-          <div className={styles.form_group}>
-            <label>Descrição</label>
-            <input 
-              className={styles.input}
+      open={isOpen}
+      onClose={onClose}
+      >
+      <Box sx={style}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          Atualizar ToDo
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Stack direction="column" spacing={4}>
+            <TextField 
+              label="Descrição" 
+              variant="standard" 
               value={description} 
               onChange={e => setDescription(e.target.value)} />
-          </div>
-          <div  className={styles.form_group}>
-            <span>
-              <label>Finalizar?</label>
-              <input type="checkbox" checked={done}  onChange={e => setDone(!done)} />
-            </span>
-          </div>
-          <div className={styles.buttons}>
-            <button  type='button' className={styles.input} onClick={handleUpdate}>Atualizar</button>
-            <button  type='button' className={styles.input} onClick={onClose}>Cancelar</button>
-          </div>
-        </form>
-      </div>
+            <Stack  direction="row" spacing={4}>
+              <span>
+                <input type="checkbox" checked={done}  onChange={e => setDone(!done)} />
+                <label>{done ? ' Continuar ? ' : ' Finalizar ? '} </label>
+              </span>
+            </Stack>
+            <Stack  direction="row" spacing={4} style={{display: 'flex', justifyContent: 'center'}}>
+              <Button variant="outlined" onClick={onClose}>Cancelar</Button>
+              <Button variant="contained" onClick={handleUpdate}>Atualizar</Button>
+            </Stack>
+          </Stack>
+        </Typography>
+      </Box>
     </Modal>
-  );
+  )
 }
 
 export default UpdateTodoModal
